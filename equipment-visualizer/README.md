@@ -1,128 +1,167 @@
 # Chemical Equipment Parameter Visualizer
 
-A web-based data visualization system where a React frontend uploads CSV files to a Django backend. The backend processes the data using Pandas and exposes summary analytics through APIs. The frontend consumes these APIs to display numbers and charts.
+## Project Overview
 
-## Project Structure
+This is a web-based data visualization application that analyzes chemical equipment data from CSV files. Users upload a CSV file containing equipment parameters, and the system automatically calculates statistics and displays visualizations.
 
+## Problem Statement
+
+Process analysts in chemical plants receive CSV files with equipment data and need to:
+- Quickly understand equipment status
+- Calculate operational averages
+- Identify patterns and trends
+
+Manually doing this in Excel is slow and error-prone.
+
+## Solution
+
+This application provides:
+- Simple CSV upload interface
+- Automatic statistical analysis
+- Clear visual representations
+- Instant results
+
+## Architecture
+
+### Backend (Django + DRF + Pandas)
+- Receives CSV files via REST API
+- Processes data using Pandas
+- Calculates statistics
+- Returns JSON responses
+- **Reusable design**: Same APIs can be used by future desktop applications
+
+### Frontend (React + Chart.js)
+- Provides upload interface
+- Sends files to backend
+- Displays results
+- Renders charts
+
+### Data Flow
 ```
-equipment-visualizer/
-├── backend/              # Django backend
-│   ├── api/             # API app with CSV processing
-│   ├── equipment_backend/  # Django project settings
-│   ├── manage.py
-│   └── requirements.txt
-└── frontend/            # React frontend
-    ├── src/
-    │   ├── components/  # React components
-    │   ├── App.js
-    │   └── index.js
-    └── package.json
+User → React → Django → Pandas → Calculations → JSON → React → Display
 ```
 
 ## Features
 
-- Upload CSV files containing equipment data
-- Automatic calculation of:
-  - Total number of equipment
-  - Average flowrate
-  - Average pressure
-  - Average temperature
-  - Equipment count per type
-- Visual charts showing equipment distribution
-- Clean separation between frontend and backend
+✅ CSV file upload  
+✅ Automatic calculation of:
+   - Total equipment count
+   - Average flowrate
+   - Average pressure
+   - Average temperature
+   - Equipment distribution by type  
+✅ Visual chart display  
+✅ Error handling  
 
-## CSV File Format
+## Technology Stack
 
-The CSV file should contain the following columns (case-insensitive):
+**Backend:**
+- Python 3.10+
+- Django 4.x
+- Django REST Framework
+- Pandas
+
+**Frontend:**
+- React 18
+- Chart.js
+- react-chartjs-2
+
+## Installation
+
+### Backend Setup
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install django djangorestframework pandas django-cors-headers
+python manage.py runserver
+```
+
+### Frontend Setup
+```bash
+cd frontend
+npm install
+npm start
+```
+
+## Usage
+
+1. Open browser to `http://localhost:3000`
+2. Click "Choose File" and select a CSV file
+3. Click "Analyze Data"
+4. View results and charts
+
+## CSV Format
+
+Required columns:
 - `equipment_name`
 - `equipment_type`
 - `flowrate`
 - `pressure`
 - `temperature`
 
-## Setup Instructions
+Example:
+```csv
+equipment_name,equipment_type,flowrate,pressure,temperature
+Pump-A,Pump,120,5.5,310
+Reactor-1,Reactor,200,6.2,350
+```
 
-### Backend Setup
+## Future Extensibility
 
-1. Navigate to the backend directory:
-   ```bash
-   cd equipment-visualizer/backend
-   ```
+The backend is designed to be reusable. The same Django APIs can be consumed by:
+- ✅ Web application (current implementation)
+- 📋 Desktop application using PyQt5 (planned)
+- 📋 Mobile application (potential)
 
-2. Create a virtual environment (recommended):
-   ```bash
-   python -m venv venv
-   ```
+No backend logic needs to be rewritten for desktop implementation.
 
-3. Activate the virtual environment:
-   - Windows:
-     ```bash
-     venv\Scripts\activate
-     ```
-   - Linux/Mac:
-     ```bash
-     source venv/bin/activate
-     ```
+## Project Structure
+```
+equipment-visualizer/
+├── backend/
+│   ├── equipment_backend/
+│   │   ├── settings.py
+│   │   └── urls.py
+│   ├── analyzer/
+│   │   ├── views.py
+│   │   └── urls.py
+│   └── manage.py
+└── frontend/
+    ├── src/
+    │   ├── App.js
+    │   ├── App.css
+    │   └── index.js
+    └── package.json
+```
 
-4. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+## Testing
 
-5. Run migrations (if needed):
-   ```bash
-   python manage.py migrate
-   ```
+Sample CSV file included: `sample_data.csv`
 
-6. Start the Django development server:
-   ```bash
-   python manage.py runserver
-   ```
+Run both servers and test:
+1. Valid CSV upload → Should show statistics and chart
+2. No file selected → Should show error message
+3. Invalid CSV format → Should show error message
 
-The backend will be available at `http://localhost:8000`
+## Author
 
-### Frontend Setup
+Developed as a complete full-stack web application demonstrating clean separation of concerns and reusable architecture.
+```
 
-1. Navigate to the frontend directory:
-   ```bash
-   cd equipment-visualizer/frontend
-   ```
+---
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+### **One-Paragraph Project Explanation**
 
-3. Start the React development server:
-   ```bash
-   npm start
-   ```
-
-The frontend will be available at `http://localhost:3000`
-
-## Usage
-
-1. Start both backend and frontend servers (see Setup Instructions above)
-2. Open your browser and navigate to `http://localhost:3000`
-3. Click "Select CSV File" and choose a CSV file with equipment data
-4. View the calculated statistics and charts
-
-## API Endpoint
-
-The backend exposes a single API endpoint:
-
-- **POST** `/api/upload/`
-  - Accepts a CSV file via multipart/form-data
-  - Returns JSON with calculated statistics
-
-## Technologies Used
-
-- **Backend**: Django 6.0.2, Django REST Framework, Pandas
-- **Frontend**: React 18.2.0, Chart.js, Axios
-- **CORS**: django-cors-headers for cross-origin requests
-
-## Notes
-
-- The backend is designed to be reusable for future desktop application development
-- No authentication or database storage is implemented in this phase
-- The system focuses on processing and displaying data, not storing it
+Save this as `PROJECT_SUMMARY.txt`:
+```
+This project is a web-based data visualization system where a React frontend 
+allows users to upload CSV files containing chemical equipment data. The CSV 
+is sent to a Django REST API backend that uses Pandas to read the file and 
+calculate summary statistics (total equipment count, average flowrate, pressure, 
+temperature, and equipment distribution by type). The backend returns these 
+results as JSON, which the React frontend displays as both numerical summaries 
+and visual charts using Chart.js. The backend is intentionally designed to be 
+UI-agnostic and reusable, meaning the same Django APIs can later be consumed 
+by a PyQt5 desktop application without any modification to the data processing 
+logic. This clean separation of concerns ensures scalability and maintainability.
