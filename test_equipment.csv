@@ -1,0 +1,6 @@
+﻿equipment_name,equipment_type,flowrate,pressure,temperature
+Pump-A,Pump,120,5.5,310
+Pump-B,Pump,115,5.3,308
+Reactor-1,Reactor,200,6.2,350
+Heater-X,Heater,80,4.1,400
+Heater-Y,Heater,85,4.3,405
